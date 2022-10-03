@@ -46,14 +46,22 @@ public class DeserializationFileTransformer implements ClassFileTransformer {
             CLSVisitor adapter = new CLSVisitor(className,writer);
             reader.accept(adapter, ClassReader.EXPAND_FRAMES);
             byte[] classData = writer.toByteArray();
-            try {
-                Files.write(Paths.get("/tmp/Controller.class"),classData);
-            } catch (IOException e) {
-                    e.printStackTrace();
-            }
+
+            writeControllerClassToDisk(classData,className);
+
             return classData;
         } else {
             return classfileBuffer;
+        }
+    }
+
+    private void writeControllerClassToDisk(byte[] data, String className) {
+        if(className.contains("Controller")) {
+            try {
+                Files.write(Paths.get("/tmp/Controller.class"), data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

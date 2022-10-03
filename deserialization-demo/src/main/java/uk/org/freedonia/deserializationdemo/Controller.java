@@ -1,18 +1,42 @@
 package uk.org.freedonia.deserializationdemo;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.org.freedonia.serializer.FilteredObjectInputStream;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.URLDecoder;
 
 @RestController
 public class Controller {
 
+
+    private static final Logger logger = LogManager.getLogger(Controller.class);
+
+
+
+
+
+
+
+    @GetMapping("/blabla/{path}/**")
+    public void doSomething(HttpServletRequest request, HttpServletResponse response, @PathVariable String path) throws IOException {
+        String data = request.getRequestURI();
+        response.setContentType("text/html");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println("<html><body><a href=\""+data+"\">Click</a></body></html>");
+
+    }
 
     /**
      * Payload is
